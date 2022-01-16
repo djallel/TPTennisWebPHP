@@ -39,7 +39,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Nom match</th>
+                                            <th>Niveau match</th>
                                             <th>Nom tournoi</th>
                                             <th>Prix Billet</th>
                                             <th>Catégorie Billet</th>

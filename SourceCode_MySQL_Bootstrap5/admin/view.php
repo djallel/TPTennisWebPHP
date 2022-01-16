@@ -8,7 +8,8 @@
     $db = Database::connect();
    // $statement = $db->prepare("SELECT items.id, items.name, items.description, items.price, items.image, categories.name AS category FROM items LEFT JOIN categories ON items.category = categories.id WHERE items.id = ?");
    $statement = $db->prepare("SELECT b.id as id,
-                                            mt.niveau as 'NomMatch' ,
+                                            mt.niveau as 'Nom' ||
+                                             'Match' ,
                                            t.nom_tournoi as 'NomTournoi' ,
                                            b.prix_billet as 'PrixBillet',
                                            cb.categorie_billet_enum_string 'categorieBillet',
@@ -58,19 +59,19 @@
             <br>
             <form>
               <div>
-                <label>Nom:</label><?php echo '  '.$item['NomMatch'];?>
+                <label>Niveau match:</label><?php echo '  '.$item['NomMatch'];?>
               </div>
               <br>
               <div>
-                <label>Description:</label><?php echo '  '.$item['NomTournoi'];?>
+                <label>Nom du tournoi:</label><?php echo '  '.$item['NomTournoi'];?>
               </div>
               <br>
               <div>
-                <label>Prix:</label><?php echo '  '.number_format((float)$item['PrixBillet'], 2, '.', ''). ' €';?>
+                <label>Prix billet:</label><?php echo '  '.number_format((float)$item['PrixBillet'], 2, '.', ''). ' €';?>
               </div>
               <br>
               <div>
-                <label>Catégorie:</label><?php echo '  '.$item['categorieBillet'];?>
+                <label>Catégorie billet:</label><?php echo '  '.$item['categorieBillet'];?>
               </div>
                 <br>
                 <div>
