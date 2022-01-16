@@ -23,13 +23,13 @@
                         <ul class="nav nav-pills" role="tablist">';
 
                 $db = Database::connect();
-                $statement = $db->query('SELECT * FROM categories');
+                $statement = $db->query('SELECT * FROM tournoi');
                 $categories = $statement->fetchAll();
                 foreach ($categories as $category) {
                     if($category['id'] == '1') {
-                        echo '<li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab'. $category['id'] . '" role="tab">' . $category['name'] . '</a></li>';
+                        echo '<li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab'. $category['id'] . '" role="tab">' . $category['nom_tournoi'] . '</a></li>';
                     } else {
-                        echo '<li class="nav-item" role="presentation"><a class="nav-link" data-bs-toggle="pill" data-bs-target="#tab'. $category['id'] . '" role="tab">' . $category['name'] . '</a></li>';
+                        echo '<li class="nav-item" role="presentation"><a class="nav-link" data-bs-toggle="pill" data-bs-target="#tab'. $category['id'] . '" role="tab">' . $category['nom_tournoi'] . '</a></li>';
                     }
                 }
 
@@ -47,16 +47,15 @@
                     
                     echo '<div class="row">';
                     
-                    $statement = $db->prepare('SELECT * FROM items WHERE items.category = ?');
+                    $statement = $db->prepare('SELECT * FROM tournoi WHERE tournoi.id = ?');
                     $statement->execute(array($category['id']));
                     while ($item = $statement->fetch()) {
                         echo '<div class="col-md-6 col-lg-4">
                                 <div class="img-thumbnail">
-                                    <img src="images/' . $item['image'] . '" class="img-fluid" alt="...">
-                                    <div class="price">' . number_format($item['price'], 2, '.', ''). ' €</div>
+                                    <img src="images/b1.png" class="img-fluid" alt="...">
                                     <div class="caption">
-                                        <h4>' . $item['name'] . '</h4>
-                                        <p>' . $item['description'] . '</p>
+                                        <h4>' . $item['nom_tournoi'] . '</h4>
+                                        <p>' . $item['nom_tournoi'] . '</p>
                                         <a href="#" class="btn btn-order" role="button"><span class="bi-cart-fill"></span> Commander</a>
                                     </div>
                                 </div>

@@ -6,7 +6,22 @@
     }
      
     $db = Database::connect();
-    $statement = $db->prepare("SELECT items.id, items.name, items.description, items.price, items.image, categories.name AS category FROM items LEFT JOIN categories ON items.category = categories.id WHERE items.id = ?");
+   // $statement = $db->prepare("SELECT items.id, items.name, items.description, items.price, items.image, categories.name AS category FROM items LEFT JOIN categories ON items.category = categories.id WHERE items.id = ?");
+   $statement = $db->prepare("SELECT b.id as id,
+                                            mt.niveau as 'NomMatch' ,
+                                           t.nom_tournoi as 'NomTournoi' ,
+                                           b.prix_billet as 'PrixBillet',
+                                           cb.categorie_billet_enum_string 'categorieBillet',
+                                           e.libelle as 'Emplacement'
+                                    FROM billet b
+                                             INNER JOIN categorie_billet cb ON b.id = cb.billet_id
+                                             INNER JOIN match_tennis as mt on b.id = mt.billet_id
+                                             INNER JOIN emplacement e on  e.billet_id= b.id
+                                             INNER JOIN tournoi t on b.id = t.billet_id
+                                    where b.id=?");
+
+
+
     $statement->execute(array($id));
     $item = $statement->fetch();
     Database::disconnect();
@@ -39,27 +54,31 @@
       <div class="container admin">
         <div class="row">
           <div class="col-md-6">
-            <h1><strong>Voir un item</strong></h1>
+            <h1><strong>Voir un billet</strong></h1>
             <br>
             <form>
               <div>
-                <label>Nom:</label><?php echo '  '.$item['name'];?>
+                <label>Nom:</label><?php echo '  '.$item['NomMatch'];?>
               </div>
               <br>
               <div>
-                <label>Description:</label><?php echo '  '.$item['description'];?>
+                <label>Description:</label><?php echo '  '.$item['NomTournoi'];?>
               </div>
               <br>
               <div>
-                <label>Prix:</label><?php echo '  '.number_format((float)$item['price'], 2, '.', ''). ' €';?>
+                <label>Prix:</label><?php echo '  '.number_format((float)$item['PrixBillet'], 2, '.', ''). ' €';?>
               </div>
               <br>
               <div>
-                <label>Catégorie:</label><?php echo '  '.$item['category'];?>
+                <label>Catégorie:</label><?php echo '  '.$item['categorieBillet'];?>
               </div>
+                <br>
+                <div>
+                    <label>Emplacement:</label><?php echo '  '.$item['Emplacement'];?>
+                </div>
               <br>
               <div>
-                <label>Image:</label><?php echo '  '.$item['image'];?>
+                <label>Image:</label>
               </div>
             </form>
             <br>
@@ -69,11 +88,11 @@
           </div>
           <div class="col-md-6 site">
             <div class="img-thumbnail">
-              <img src="<?php echo '../images/'.$item['image'];?>" alt="...">
-              <div class="price"><?php echo number_format((float)$item['price'], 2, '.', ''). ' €';?></div>
+              <img src="<?php echo '../images/b1.png';?>" alt="...">
+              <div class="price"><?php echo number_format((float)$item['PrixBillet'], 2, '.', ''). ' €';?></div>
               <div class="caption">
-                <h4><?php echo $item['name'];?></h4>
-                <p><?php echo $item['description'];?></p>
+                <h4><?php echo $item['NomMatch'];?></h4>
+                <p><?php echo $item['NomTournoi'];?></p>
                 <a href="#" class="btn btn-order" role="button"><span class="bi-cart-fill"></span> Commander</a>
               </div>
             </div>

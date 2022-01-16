@@ -39,10 +39,11 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Nom</th>
-                                            <th>Description</th>
-                                            <th>Prix</th>
-                                            <th>Catégorie</th>
+                                            <th>Nom match</th>
+                                            <th>Nom tournoi</th>
+                                            <th>Prix Billet</th>
+                                            <th>Catégorie Billet</th>
+                                            <th>Emplacement</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -52,19 +53,34 @@
                                     <?php
                                         require 'database.php';
                                         $db = Database::connect();
-                                        $statement = $db->query('SELECT items.id, items.name, items.description, items.price, categories.name AS category FROM items LEFT JOIN categories ON items.category = categories.id ORDER BY items.id DESC');
+                                    //    $statement = $db->query('SELECT items.id, items.name, items.description, items.price, categories.name AS category FROM items LEFT JOIN categories ON items.category = categories.id ORDER BY items.id DESC');
+
+
+                                             $statement = $db->query("SELECT b.id as id,
+                                                                                       mt.niveau as NomMatch ,
+                                                                                       t.nom_tournoi as NomTournoi ,
+                                                                                       b.prix_billet as PrixBillet ,
+                                                                                       cb.categorie_billet_enum_string categorieBillet,
+                                                                                       e.libelle as Emplacement
+                                                                                 FROM billet b
+                                                                                         INNER JOIN categorie_billet cb ON b.id = cb.billet_id
+                                                                                         INNER JOIN match_tennis as mt on b.id = mt.billet_id
+                                                                                         INNER JOIN emplacement e on  e.billet_id= b.id
+                                                                                         INNER JOIN tournoi t on b.id = t.billet_id
+                                                                                ");
+
+
                                                     while($item = $statement->fetch()) {
                                                     echo '<tr>';
-                                                        echo '<td>'. $item['name'] . '</td>';
-                                                        echo '<td>'. $item['description'] . '</td>';
-                                                        echo '<td>'. number_format($item['price'], 2, '.', '') . '</td>';
-                                                        echo '<td>'. $item['category'] . '</td>';
+                                                        echo '<td>'. $item['NomMatch'] . '</td>';
+                                                        echo '<td>'. $item['NomTournoi'] . '</td>';
+                                                        echo '<td>'. number_format($item['PrixBillet'], 2, '.', '') . '</td>';
+                                                        echo '<td>'. $item['categorieBillet'] . '</td>';
+                                                        echo '<td>'. $item['Emplacement'] . '</td>';
                                                         echo '<td width=340>';
                                                             echo '<a class="btn btn-secondary" href="view.php?id='.$item['id'].'"><span class="bi-eye"></span> Voir</a>';
                                                             echo ' ';
-                                                            echo '<a class="btn btn-primary" href="update.php?id='.$item['id'].'"><span class="bi-pencil"></span> Modifier</a>';
                                                             echo ' ';
-                                                            echo '<a class="btn btn-danger" href="delete.php?id='.$item['id'].'"><span class="bi-x"></span> Supprimer</a>';
                                                             echo '</td>';
                                                         echo '</tr>';
                                                     }
